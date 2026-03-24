@@ -80,7 +80,7 @@ const phrases : Record<string, MessageReplies[]> = {
   "💀": [MessageReplies.SKULL],
 
   // Clanka
-  "clank(?:a|er)": [MessageReplies.ROBOT]
+  "clank(?:a|er)s?": [MessageReplies.ROBOT]
 
 }
 
