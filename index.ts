@@ -6,6 +6,9 @@ import {
   GatewayIntentBits, OmitPartialGroupDMChannel, Message
 } from 'discord.js';
 
+import rawConfig from './config.json';
+const CONFIG = rawConfig as Config;
+
 const client = new Client({
   intents: [
       GatewayIntentBits.Guilds,
@@ -23,8 +26,6 @@ enum MessageReplies {
   SUNGLASSES = "😎",
   BALLOON = "🎈",
   ROBOT = "🤖",
-  // SIX = "6️⃣",
-  // SEVEN = "7️⃣",
   CAT = "🐈",
   EYEROLL = "🙄",
   PAWS = "🐾"
@@ -34,6 +35,7 @@ const phrases : Record<string, MessageReplies[]> = {
   // Val/Overwatch
   "fika": [MessageReplies.SICK],
   "jetpack cat": [MessageReplies.SICK],
+  "ow": [MessageReplies.SICK],
   "overwatch": [MessageReplies.SICK],
   "over watch": [MessageReplies.SICK],
   "juno": [MessageReplies.EYEROLL],
@@ -41,24 +43,28 @@ const phrases : Record<string, MessageReplies[]> = {
   // Belle, Cool
   "cool": [MessageReplies.SUNGLASSES],
   "swag": [MessageReplies.SUNGLASSES],
-  "pog": [MessageReplies.SUNGLASSES],
-  "poggers": [MessageReplies.SUNGLASSES],
+  "pogg?(?:er|ies)?s?": [MessageReplies.SUNGLASSES],
+  "w": [MessageReplies.SUNGLASSES],
+  "nice": [MessageReplies.SUNGLASSES],
 
-  // Luna, Balloon
-  "inflation": [MessageReplies.BALLOON],
+  // Inflation, Big n Round (Inflation Fetish)
+  "inflat(?:ed?|ing|ion)": [MessageReplies.BALLOON],
   "blimp": [MessageReplies.BALLOON],
+  "helium": [MessageReplies.BALLOON],
+  "sphere": [MessageReplies.BALLOON],
+  "orb": [MessageReplies.BALLOON],
 
   // Furry, Paws :3
-  "paw": [MessageReplies.PAWS],
-  "pawpad": [MessageReplies.PAWS],
-  "bean": [MessageReplies.PAWS],
+  "paws?": [MessageReplies.PAWS],
+  "pawpads?": [MessageReplies.PAWS],
+  "beans?": [MessageReplies.PAWS],
 
-  // Furry
+  // Furry, General
+  "good (?:boy|girl|dog|pup(?:py)?|kitty)": [MessageReplies.BONE],
+  "woof": [MessageReplies.BONE],
   ":3": [MessageReplies.BONE],
-  "miau": [MessageReplies.CAT],
-  "meow": [MessageReplies.CAT],
-  "mow": [MessageReplies.CAT],
-  "mew": [MessageReplies.CAT],
+  "m(?:eow|ew|iau|ow)": [MessageReplies.CAT],
+  "nyan?": [MessageReplies.CAT],
 
   // Nox, Sob/Lovely
   "lovely": [MessageReplies.SOB],
@@ -67,18 +73,19 @@ const phrases : Record<string, MessageReplies[]> = {
 
   // Nox, Skull
   "die": [MessageReplies.SKULL],
+  "dead": [MessageReplies.SKULL],
   ":skull:": [MessageReplies.SKULL],
   "💀": [MessageReplies.SKULL],
 
   // Clanka
-  "clanka": [MessageReplies.ROBOT],
-  "clanker": [MessageReplies.ROBOT],
-
-  // 6 7 (Disabled because it triggers way too frequently)
-  // "67": [MessageReplies.SIX, MessageReplies.SEVEN],
-  // "6 7": [MessageReplies.SIX, MessageReplies.SEVEN]
+  "clank(?:a|er)": [MessageReplies.ROBOT]
 
 }
+
+const phrasePatterns = Object.entries(phrases).map(([phrase, replies]) => ({
+  regex: new RegExp(`(?<!\\w)${phrase}(?!\\w)`, 'i'),
+  replies
+}));
 
 client.once(Events.ClientReady, async (readyClient: Client<true>) => {
   console.log(`Ready! Logged in as ${readyClient.user.tag}`)
@@ -89,13 +96,15 @@ client.once(Events.ClientReady, async (readyClient: Client<true>) => {
     console.log(`Server: ${server.name} (${server.id})`)
   }
 
-  readyClient.channels.fetch('1435769682693980296').then(channel => {
-    if (!channel) return;
+  if (CONFIG.BotDeclareBoot) {
+    readyClient.channels.fetch('1435769682693980296').then(channel => {
+      if (!channel) return;
 
-    if (channel.isSendable()) {
-      channel.send(`Bot Rebooted :3\n**${Object.keys(phrases).length}** phrases loaded!\nPossible emoji replies are: ${Object.values(MessageReplies).join(', ')}`);
-    }
-  })
+      if (channel.isSendable()) {
+        channel.send(`Bot Rebooted :3\n**${Object.keys(phrases).length}** phrases loaded!\nPossible emoji replies are: ${Object.values(MessageReplies).join(', ')}`);
+      }
+    })
+  }
 
   console.log('Done!')
 })
@@ -103,19 +112,17 @@ client.once(Events.ClientReady, async (readyClient: Client<true>) => {
 client.on(Events.MessageCreate, async message => {
   if (message.author.id === client.user?.id) return; // Ignore self
 
-  const messageContent = message.content.toLowerCase();
-  if (!messageContent.length) return;
+  if (!message.content.length) return;
 
   logMessage(message);
 
-  for (const phrase in phrases) {
-    if (messageContent.includes(phrase)) {
-      const reply = phrases[phrase];
-      console.log(`Phrase detected, replying: ${reply}`)
-      for (const emoji of reply) {
+  for (const pattern of phrasePatterns) {
+    if (pattern.regex.test(message.content)) {
+      console.log(`Phrase detected → ${pattern.replies.join(' ')}`);
+      for (const emoji of pattern.replies) {
         await message.react(emoji).catch(console.error);
       }
-      // break; // Temp Disabled to allow multi-triggers
+      if (!CONFIG.AllowMultiPhraseDetection) break;
     }
   }
 })
