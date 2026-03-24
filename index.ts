@@ -1,7 +1,6 @@
 require('dotenv').config();
 
 import {
-  Guild,
   Client,
   Events,
   GatewayIntentBits, OmitPartialGroupDMChannel, Message
@@ -69,7 +68,7 @@ const phrases : Record<string, MessageReplies[]> = {
   "clanka": [MessageReplies.ROBOT],
   "clanker": [MessageReplies.ROBOT],
 
-  // 6 7
+  // 6 7 (Disabled because it triggers way too frequently)
   // "67": [MessageReplies.SIX, MessageReplies.SEVEN],
   // "6 7": [MessageReplies.SIX, MessageReplies.SEVEN]
 
@@ -110,7 +109,7 @@ client.on(Events.MessageCreate, async message => {
       for (const emoji of reply) {
         await message.react(emoji).catch(console.error);
       }
-      // break;
+      // break; // Temp Disabled to allow multi-triggers
     }
   }
 })
