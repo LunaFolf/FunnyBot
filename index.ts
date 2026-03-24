@@ -49,11 +49,9 @@ const phrases : Record<string, MessageReplies[]> = {
   "blimp": [MessageReplies.BALLOON],
 
   // Furry, Paws :3
-  "paws": [MessageReplies.PAWS],
   "paw": [MessageReplies.PAWS],
-  "pawpads": [MessageReplies.PAWS],
+  "pawpad": [MessageReplies.PAWS],
   "bean": [MessageReplies.PAWS],
-  "beans": [MessageReplies.PAWS],
 
   // Furry
   ":3": [MessageReplies.BONE],
