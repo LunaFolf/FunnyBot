@@ -26,7 +26,8 @@ enum MessageReplies {
   // SIX = "6️⃣",
   // SEVEN = "7️⃣",
   CAT = "🐈",
-  EYEROLL = "🙄"
+  EYEROLL = "🙄",
+  PAWS = "🐾"
 }
 
 const phrases : Record<string, MessageReplies[]> = {
@@ -46,6 +47,13 @@ const phrases : Record<string, MessageReplies[]> = {
   // Luna, Balloon
   "inflation": [MessageReplies.BALLOON],
   "blimp": [MessageReplies.BALLOON],
+
+  // Furry, Paws :3
+  "paws": [MessageReplies.PAWS],
+  "paw": [MessageReplies.PAWS],
+  "pawpads": [MessageReplies.PAWS],
+  "bean": [MessageReplies.PAWS],
+  "beans": [MessageReplies.PAWS],
 
   // Furry
   ":3": [MessageReplies.BONE],
