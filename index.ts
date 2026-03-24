@@ -29,11 +29,13 @@ enum MessageReplies {
   CAT = "🐈",
   ROFL = "🤣",
   EYEROLL = "🙄",
-  PAWS = "🐾"
+  PAWS = "🐾",
+  FEARFUL = "😨",
+  FIRE = "🔥"
 }
 
 const phrases : Record<string, MessageReplies[]> = {
-  // Val/Overwatch
+  // Overwatch
   "fika": [MessageReplies.EYEROLL],
   "jetpack cat": [MessageReplies.EYEROLL],
   "ow": [MessageReplies.ROFL],
@@ -41,12 +43,18 @@ const phrases : Record<string, MessageReplies[]> = {
   "over watch": [MessageReplies.SICK],
   "juno": [MessageReplies.EYEROLL],
 
-  // Belle, Cool
+  // Val
+  "h(?:u+|eu|ue)h+": [MessageReplies.FEARFUL],
+
+  // Cool
   "cool": [MessageReplies.SUNGLASSES],
   "swag": [MessageReplies.SUNGLASSES],
   "pogg?(?:er|ies)?s?": [MessageReplies.SUNGLASSES],
   "w": [MessageReplies.SUNGLASSES],
   "nice": [MessageReplies.SUNGLASSES],
+
+  // hell yeah
+  "hell ye(?:a+)*h*": [MessageReplies.FIRE],
 
   // Inflation, Big n Round (Inflation Fetish)
   "inflat(?:ed?|ing|ion)": [MessageReplies.BALLOON],
