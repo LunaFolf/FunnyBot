@@ -27,15 +27,16 @@ enum MessageReplies {
   BALLOON = "🎈",
   ROBOT = "🤖",
   CAT = "🐈",
+  ROFL = "🤣",
   EYEROLL = "🙄",
   PAWS = "🐾"
 }
 
 const phrases : Record<string, MessageReplies[]> = {
   // Val/Overwatch
-  "fika": [MessageReplies.SICK],
-  "jetpack cat": [MessageReplies.SICK],
-  "ow": [MessageReplies.SICK],
+  "fika": [MessageReplies.EYEROLL],
+  "jetpack cat": [MessageReplies.EYEROLL],
+  "ow": [MessageReplies.ROFL],
   "overwatch": [MessageReplies.SICK],
   "over watch": [MessageReplies.SICK],
   "juno": [MessageReplies.EYEROLL],
@@ -55,6 +56,7 @@ const phrases : Record<string, MessageReplies[]> = {
   "orb": [MessageReplies.BALLOON],
 
   // Furry, Paws :3
+  "purfect": [MessageReplies.PAWS],
   "paws?": [MessageReplies.PAWS],
   "pawpads?": [MessageReplies.PAWS],
   "beans?": [MessageReplies.PAWS],
@@ -101,7 +103,11 @@ client.once(Events.ClientReady, async (readyClient: Client<true>) => {
       if (!channel) return;
 
       if (channel.isSendable()) {
-        channel.send(`Bot Rebooted :3\n**${Object.keys(phrases).length}** phrases loaded!\nPossible emoji replies are: ${Object.values(MessageReplies).join(', ')}`);
+        channel.send(`Bot Rebooted :3
+        **${phrasePatterns.length}** phrase patterns loaded (regex multiplies!)
+        **${Object.values(MessageReplies).length}** possible emoji reactions
+        
+        Emojis: ${Object.values(MessageReplies).join(', ')}`);
       }
     })
   }
