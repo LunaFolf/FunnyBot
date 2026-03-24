@@ -18,6 +18,28 @@ const client = new Client({
   ]
 })
 
+function estimateVariants(pattern: string): number {
+  let total = 1;
+
+  // Count alternation groups like (a|b|c)
+  const alternations = pattern.match(/\((?:\?:)?([^()]+)\)/g);
+  if (alternations) {
+    for (const group of alternations) {
+      const inner = group.replace(/^\(\?:?/, '').replace(/\)$/, '');
+      const options = inner.split('|').length;
+      total *= options;
+    }
+  }
+
+  // Count optional segments ( ? )
+  const optionalMatches = pattern.match(/\?/g);
+  if (optionalMatches) {
+    total *= Math.pow(2, optionalMatches.length);
+  }
+
+  return total;
+}
+
 enum MessageReplies {
   SOB = "😭",
   SKULL = "💀",
@@ -89,13 +111,16 @@ const phrases : Record<string, MessageReplies[]> = {
 
   // Clanka
   "clank(?:a|er)s?": [MessageReplies.ROBOT]
-
 }
 
 const phrasePatterns = Object.entries(phrases).map(([phrase, replies]) => ({
   regex: new RegExp(`(?<!\\w)${phrase}(?!\\w)`, 'i'),
   replies
 }));
+
+const estimatedPhraseCount = Object.keys(phrases)
+    .map(p => estimateVariants(p))
+    .reduce((a, b) => a + b, 0);
 
 client.once(Events.ClientReady, async (readyClient: Client<true>) => {
   console.log(`Ready! Logged in as ${readyClient.user.tag}`)
@@ -112,7 +137,8 @@ client.once(Events.ClientReady, async (readyClient: Client<true>) => {
 
       if (channel.isSendable()) {
         channel.send(`Bot Rebooted :3
-        **${phrasePatterns.length}** phrase patterns loaded (regex multiplies!)
+        **${phrasePatterns.length}** phrase patterns loaded
+        Estimated **≈${estimatedPhraseCount}** phrases
         **${Object.values(MessageReplies).length}** possible emoji reactions
         
         Emojis: ${Object.values(MessageReplies).join(', ')}`);
