@@ -44,6 +44,7 @@ enum MessageReplies {
   SOB = "😭",
   SKULL = "💀",
   BONE = "🦴",
+  DOG = "🐕‍🦺",
   SICK = "🤢",
   SUNGLASSES = "😎",
   BALLOON = "🎈",
@@ -53,7 +54,8 @@ enum MessageReplies {
   EYEROLL = "🙄",
   PAWS = "🐾",
   FEARFUL = "😨",
-  FIRE = "🔥"
+  FIRE = "🔥",
+  YIPPEE = "<:belleyippee:1443652687559397396>"
 }
 
 const phrases : Record<string, MessageReplies[]> = {
@@ -75,6 +77,8 @@ const phrases : Record<string, MessageReplies[]> = {
   "w": [MessageReplies.SUNGLASSES],
   "nice": [MessageReplies.SUNGLASSES],
 
+  "yip+e+": [MessageReplies.YIPPEE],
+
   // hell yeah
   "hell ye(?:a+)*h*": [MessageReplies.FIRE],
 
@@ -92,10 +96,9 @@ const phrases : Record<string, MessageReplies[]> = {
   "beans?": [MessageReplies.PAWS],
 
   // Furry, General
-  "good (?:boy|girl|dog|pup(?:py)?|kitty)": [MessageReplies.BONE],
-  "woof": [MessageReplies.BONE],
-  ":3": [MessageReplies.BONE],
-  "m(?:e*o*|o*e*|e*|i*a*u*|o)w": [MessageReplies.CAT],
+  "good (?:boy|girl|dog|pup(?:py)?)": [MessageReplies.DOG],
+  "wu*o*f+": [MessageReplies.DOG],
+  "m(?:e+o+|o+e+|eo|ow|iau+)w?": [MessageReplies.CAT],
   "nyan?": [MessageReplies.CAT],
 
   // Nox, Sob/Lovely
@@ -104,6 +107,7 @@ const phrases : Record<string, MessageReplies[]> = {
   "😭": [MessageReplies.SOB],
 
   // Nox, Skull
+  "kill": [MessageReplies.SKULL],
   "die": [MessageReplies.SKULL],
   "dead": [MessageReplies.SKULL],
   ":skull:": [MessageReplies.SKULL],
