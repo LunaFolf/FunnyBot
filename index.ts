@@ -95,7 +95,7 @@ const phrases : Record<string, MessageReplies[]> = {
   "good (?:boy|girl|dog|pup(?:py)?|kitty)": [MessageReplies.BONE],
   "woof": [MessageReplies.BONE],
   ":3": [MessageReplies.BONE],
-  "m(?:eo|e|iau|o)w*": [MessageReplies.CAT],
+  "m(?:e*o*|e|i*a*u*|o)w*": [MessageReplies.CAT],
   "nyan?": [MessageReplies.CAT],
 
   // Nox, Sob/Lovely
