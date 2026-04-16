@@ -55,7 +55,8 @@ enum MessageReplies {
   PAWS = "🐾",
   FEARFUL = "😨",
   FIRE = "🔥",
-  YIPPEE = "<:belleyippee:1443652687559397396>"
+  YIPPEE = "<:belleyippee:1443652687559397396>",
+  TREE = "🌲"
 }
 
 const phrases : Record<string, MessageReplies[]> = {
@@ -114,7 +115,10 @@ const phrases : Record<string, MessageReplies[]> = {
   "💀": [MessageReplies.SKULL],
 
   // Clanka
-  "clank(?:a|er)s?": [MessageReplies.ROBOT]
+  "clank(?:a|er)s?": [MessageReplies.ROBOT],
+
+  // Tree
+  "trees*": [MessageReplies.TREE]
 }
 
 const phrasePatterns = Object.entries(phrases).map(([phrase, replies]) => ({
