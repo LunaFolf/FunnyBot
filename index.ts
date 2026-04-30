@@ -1,3 +1,5 @@
+import {Config, ReminderState, BelleReminder} from "./types";
+
 require('dotenv').config();
 
 import {
@@ -130,6 +132,12 @@ const estimatedPhraseCount = Object.keys(phrases)
     .map(p => estimateVariants(p))
     .reduce((a, b) => a + b, 0);
 
+const belleReminder: BelleReminder = {
+  reminderHour: 20,
+  channelID: '1482773695620452414',
+  state: ReminderState.UNSENT
+}
+
 client.once(Events.ClientReady, async (readyClient: Client<true>) => {
   console.log(`Ready! Logged in as ${readyClient.user.tag}`)
 
@@ -155,6 +163,42 @@ client.once(Events.ClientReady, async (readyClient: Client<true>) => {
   }
 
   console.log('Done!')
+
+  ;await (async () => {
+    while (true) {
+      // Reminder Check
+      if (belleReminder.state == ReminderState.UNSENT && new Date().getHours() >= belleReminder.reminderHour) {
+        belleReminder.state = ReminderState.SENDING;
+        readyClient.channels.fetch(belleReminder.channelID).then(channel => {
+          if (!channel) {
+            console.error('Unable to find channel for reminder, channel ID: ', belleReminder.channelID);
+            belleReminder.state = ReminderState.UNSENT;
+            return;
+          }
+
+          if (channel.isSendable()) {
+            channel.send(`<@636912731412496385>\n# REMINDER\n**Please post progress for your work today** 🧡`)
+                .then(() => belleReminder.state = ReminderState.SENT)
+                .catch((err) => {
+                  console.error('Error sending reminder: ', err);
+                  belleReminder.state = ReminderState.UNSENT;
+                });
+          } else {
+            console.error('Found channel, but it\'s not sendable?');
+            belleReminder.state = ReminderState.UNSENT;
+          }
+
+        })
+      } else if (belleReminder.state == ReminderState.SENT && new Date().getHours() < belleReminder.reminderHour) belleReminder.state = ReminderState.UNSENT; // new Day
+
+      // Delay
+      await new Promise<void>((resolve) => {
+        setTimeout(() => {
+          resolve()
+        }, 1000)
+      })
+    }
+  })();
 })
 
 client.on(Events.MessageCreate, async message => {
@@ -190,4 +234,4 @@ function logMessage(message: OmitPartialGroupDMChannel<Message>) {
   console.log(logContent)
 }
 
-client.login(process.env.DISCORD_TOKEN)
+client.login(process.env.DISCORD_TOKEN);

@@ -10,7 +10,7 @@
     "outDir": "dist"
   },
   "files": [
-    "types.d.ts",
+    "types.ts",
     "index.ts"
   ]
 }
