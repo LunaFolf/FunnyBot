@@ -133,7 +133,7 @@ const estimatedPhraseCount = Object.keys(phrases)
     .reduce((a, b) => a + b, 0);
 
 const belleReminder: BelleReminder = {
-  reminderHour: 20,
+  reminderHour: 19,
   channelID: '1482773695620452414',
   state: ReminderState.UNSENT
 }
