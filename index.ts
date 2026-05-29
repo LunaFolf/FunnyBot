@@ -9,13 +9,15 @@ import {
 } from 'discord.js';
 
 import rawConfig from './config.json';
-import {readFileSync, writeFileSync} from "node:fs";
+import {readFileSync, writeFileSync, existsSync} from "node:fs";
 const CONFIG = rawConfig as Config;
 
-let ordinal: number;
+let ordinal: number = 0;
 
 function loadOrdinal() {
-  let value = readFileSync("ordinal", "utf8");
+  let value;
+  if (existsSync("ordinal")) value = readFileSync("ordinal", "utf8");
+  else return;
   ordinal = Number(value);
 }
 
