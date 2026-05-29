@@ -9,7 +9,19 @@ import {
 } from 'discord.js';
 
 import rawConfig from './config.json';
+import {readFileSync, writeFileSync} from "node:fs";
 const CONFIG = rawConfig as Config;
+
+let ordinal: number;
+
+function loadOrdinal() {
+  let value = readFileSync("ordinal", "utf8");
+  ordinal = Number(value);
+}
+
+function saveOrdinal(ordinal: number) {
+  writeFileSync("ordinal", ordinal.toString(), "utf8");
+}
 
 const client = new Client({
   intents: [
@@ -133,13 +145,15 @@ const estimatedPhraseCount = Object.keys(phrases)
     .reduce((a, b) => a + b, 0);
 
 const belleReminder: BelleReminder = {
-  reminderHour: 19,
+  reminderHour: 20,
   channelID: '1482773695620452414',
   state: ReminderState.UNSENT
 }
 
 client.once(Events.ClientReady, async (readyClient: Client<true>) => {
   console.log(`Ready! Logged in as ${readyClient.user.tag}`)
+
+  loadOrdinal();
 
   const servers = await readyClient.guilds.fetch();
   console.log(`Servers: ${servers.size}`)
@@ -167,6 +181,7 @@ client.once(Events.ClientReady, async (readyClient: Client<true>) => {
   ;await (async () => {
     while (true) {
       // Reminder Check
+
       if (belleReminder.state == ReminderState.UNSENT && new Date().getHours() >= belleReminder.reminderHour) {
         belleReminder.state = ReminderState.SENDING;
         readyClient.channels.fetch(belleReminder.channelID).then(channel => {
