@@ -72,7 +72,8 @@ enum MessageReplies {
   FEARFUL = "😨",
   FIRE = "🔥",
   YIPPEE = "<:belleyippee:1443652687559397396>",
-  TREE = "🌲"
+  TREE = "🌲",
+  HUG = "🫂"
 }
 
 const phrases : Record<string, MessageReplies[]> = {
@@ -119,16 +120,13 @@ const phrases : Record<string, MessageReplies[]> = {
   "nyan?": [MessageReplies.CAT],
 
   // Nox, Sob/Lovely
-  "lovely": [MessageReplies.SOB],
-  ":sob:": [MessageReplies.SOB],
-  "😭": [MessageReplies.SOB],
-
-  // Nox, Skull
-  "kill": [MessageReplies.SKULL],
-  "die": [MessageReplies.SKULL],
-  "dead": [MessageReplies.SKULL],
-  ":skull:": [MessageReplies.SKULL],
-  "💀": [MessageReplies.SKULL],
+  ":sob:": [MessageReplies.HUG],
+  "😭": [MessageReplies.HUG],
+  "kill": [MessageReplies.HUG],
+  "die": [MessageReplies.HUG],
+  "dead": [MessageReplies.HUG],
+  ":skull:": [MessageReplies.HUG],
+  "💀": [MessageReplies.HUG],
 
   // Clanka
   "clank(?:a|er)s?": [MessageReplies.ROBOT],
